@@ -6,19 +6,26 @@ namespace _Project.Code.MapGenerator
     [Serializable]
     public class MapGenerationAlgo
     {
+        public GameMap map;
+        
         public List<GenerationStep> GenerationSteps = new List<GenerationStep>();
+
         
         
-        
-        public void GenerateMap()
+        public GameMap GenerateMap()
         {
+            map = new GameMap();
+            
             GenerationSteps.Sort((a, b) => a.Order.CompareTo(b.Order));
+            
             
 
             foreach (var step in GenerationSteps)
             {
-                step.ExecuteStep();
+                step.ExecuteStep(map);
             }
+
+            return map;
         }
         
     }
