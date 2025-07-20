@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace _Project.Code.MapGenerator
 {
     [Serializable]
     public class MapGenerationAlgo
     {
-        public GameMap map;
+        [HideInInspector] public GameMap map;
+
+
         
         public List<GenerationStep> GenerationSteps = new List<GenerationStep>();
 

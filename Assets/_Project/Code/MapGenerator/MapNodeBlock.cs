@@ -4,7 +4,7 @@ namespace _Project.Code.MapGenerator
 {
     public class MapNodeBlock
     {
-        public int nodeCount = 1;
+        public int NodeCount = 1;
         
         public List<MapNode> nodes;
         

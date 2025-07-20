@@ -1,9 +1,10 @@
+using System;
 using _Project.Code.MapGenerator;
 using UnityEngine;
 
 public class MB_MapManager : MonoBehaviour
 {
-    public MB_MapManager Instance;
+    public static MB_MapManager Instance;
     
     public GameMap CurrentMap;
     public MapGenerationAlgo GenerationAlgorithm;
@@ -21,8 +22,10 @@ public class MB_MapManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
-    
+
+
+
+
     public void GenerateMap()
     {
         if (GenerationAlgorithm != null)
