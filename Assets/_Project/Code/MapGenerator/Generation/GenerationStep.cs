@@ -21,7 +21,6 @@ namespace _Project.Code.MapGenerator
             // This could involve setting up terrain, skybox, etc.
             UnityEngine.Debug.Log("Generating Map Background");
         }
-        
     }
     
     
