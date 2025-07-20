@@ -33,9 +33,7 @@ namespace _Project.Code.MapGenerator
                 
                 for (int y = 0; y < block.NodeCount; y++)
                 {
-                    
-                    Vector2 nodeId = new Vector2(x, y);
-                    string nodeName = $"Node_{nodeId}";
+                    string nodeName = $"Node_{x}_{y}";
                     
                     NodeType type;
                     switch (x)
@@ -51,7 +49,7 @@ namespace _Project.Code.MapGenerator
                             break;
                     }
 
-                    block.nodes.Add(new MapNode(nodeName, nodeId, type));
+                    block.nodes.Add(new MapNode(nodeName, type));
                 }
 
                 map.mapNodeBlocks.Add(block);

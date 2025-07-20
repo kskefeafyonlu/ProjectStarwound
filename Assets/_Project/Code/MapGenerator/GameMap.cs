@@ -9,10 +9,13 @@ namespace _Project.Code.MapGenerator
     {
         
         public List<MapNodeBlock> mapNodeBlocks;
+        
+        public List<NodeConnection> nodeConnections;
 
         public GameMap()
         {
             mapNodeBlocks = new List<MapNodeBlock>();
+            nodeConnections = new List<NodeConnection>();
 
         }
         
