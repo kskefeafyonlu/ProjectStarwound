@@ -1,4 +1,5 @@
 using _Project.Code.MapGenerator;
+using _Project.Code.MapGenerators.StarMapGeneration;
 using UnityEngine;
 
 namespace _Project.Code.SystemMapGenerator
@@ -7,9 +8,11 @@ namespace _Project.Code.SystemMapGenerator
     {
         public static MB_MapManager Instance;
 
-        public GameMap CurrentMap;
+        public SystemMap CurrentSystemMap;
+        public StarMap CurrentStarMap;
+
         public SystemMapGenerationAlgo SystemGenerationAlgorithm;
-        public 
+        public StarMapGenerationAlgo StarMapGenerationAlgorithm;
 
 
         private void Awake()
@@ -32,7 +35,13 @@ namespace _Project.Code.SystemMapGenerator
         {
             if (SystemGenerationAlgorithm != null)
             {
-                CurrentMap = SystemGenerationAlgorithm.GenerateMap();
+                CurrentSystemMap = SystemGenerationAlgorithm.GenerateMap();
+                StarMapGenerationAlgorithm.GenerateMap(CurrentSystemMap);
+                Debug.Log("System Map generated with " + CurrentSystemMap.mapNodeBlocks.Count + " Node Blocks.");
+                Debug.Log("First Node Block has " + CurrentSystemMap.mapNodeBlocks[0].nodes.Count + " Nodes.");
+                Debug.Log("First Node has Star Map with " + CurrentSystemMap.mapNodeBlocks[0].nodes[0].StarMap.StarNodes.Length + " Star Nodes.");
+                
+                CurrentStarMap = CurrentSystemMap.mapNodeBlocks[0].nodes[0].StarMap;
             }
             else
             {
@@ -40,16 +49,34 @@ namespace _Project.Code.SystemMapGenerator
             }
         }
 
-        public void GenerateStarMap()
+        
+        
+        
+        
+        public void SelectNewSystemNode(SystemMap systemMap)
         {
-            if (SystemGenerationAlgorithm != null)
+            if (systemMap != null)
             {
-                
+                CurrentSystemMap = systemMap;
+                CurrentStarMap = CurrentSystemMap.mapNodeBlocks[0].nodes[0].StarMap;
             }
             else
             {
-                Debug.LogError("No generation algorithm set!");
+                Debug.LogError("Selected System Map is null!");
             }
+        }
+
+        public void SelectNewStarNode(StarMap starMap)
+        {
+            if (starMap != null)
+            {
+                CurrentStarMap = starMap;
+            }
+            else
+            {
+                Debug.LogError("Selected Star Map is null!");
+            }
+
 
         }
     }

@@ -1,3 +1,4 @@
+using _Project.Code.MapGenerators.StarMapGeneration;
 using UnityEngine;
 
 namespace _Project.Code.MapGenerator
@@ -14,7 +15,7 @@ namespace _Project.Code.MapGenerator
         public string NodeName = "DefaultNode";
         public NodeType Type = NodeType.Normal;
 
-        
+        public StarMap StarMap;
         
         
         public MapNode(string nodeName, NodeType type = NodeType.Normal)

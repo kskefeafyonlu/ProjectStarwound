@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Project.Code.MapGenerators.StarMapGeneration;
 using _Project.Code.SystemMapGenerator;
 using UnityEngine;
 
@@ -11,7 +12,11 @@ namespace _Project.Code.MapGenerator
         public GameObject nodePrefab;
         public GameObject connectionPrefab;
 
-        [HideInInspector] public GameMap map;
+        public Transform starMapParent;
+        public GameObject starNodePrefab;
+
+        [HideInInspector] public SystemMap map;
+        [HideInInspector] public StarMap starMap;
 
         public float nodeSpacingX = 100.0f;
         public float nodeSpacingY = 100.0f;
@@ -28,7 +33,9 @@ namespace _Project.Code.MapGenerator
 
         private void Update()
         {
-            map = MB_MapManager.Instance.CurrentMap;
+            map = MB_MapManager.Instance.CurrentSystemMap;
+            starMap = MB_MapManager.Instance.CurrentStarMap;
+            
 
             timer += Time.deltaTime;
             if (timer >= updateInterval)
@@ -37,25 +44,78 @@ namespace _Project.Code.MapGenerator
                 {
                     Debug.Log("Visualizing Map with " + map.mapNodeBlocks.Count + " Node Blocks.");
                     VisualizeMap(map);
+                    
                 }
                 timer = 0f;
             }
         }
 
-        public void VisualizeMap(GameMap gameMap)
+
+
+        private Vector2 GetStarNodePosition(StarNode starNode, RectTransform rectTransform)
+        {
+            RectTransform parentRect = rectTransform.parent as RectTransform;
+            if (parentRect == null) return Vector2.zero;
+
+            float parentWidth = parentRect.rect.width;
+            float parentHeight = parentRect.rect.height;
+
+            int gridX = 6;
+            int gridY = 4;
+
+            float cellWidth = parentWidth / gridX;
+            float cellHeight = parentHeight / gridY;
+
+            int x = starNode.ArrayPosition.x;
+            int y = starNode.ArrayPosition.y;
+
+            float cellOriginX = x * cellWidth;
+            float cellOriginY = y * cellHeight;
+
+            float offsetX = starNode.PositionInCell.x * cellWidth;
+            float offsetY = starNode.PositionInCell.y * cellHeight;
+
+            return new Vector2(cellOriginX + offsetX, cellOriginY + offsetY);
+        }
+
+
+        public void VisualizeMap(SystemMap systemMap)
         {
 
             ClearMapObjects();
             
-            VisualizeNodes(gameMap);
-            VisualizeConnections(gameMap);
+            VisualizeNodes(systemMap);
+            VisualizeConnections(systemMap);
+            VisualizeStarMap(MB_MapManager.Instance.CurrentStarMap);
+        }
+        
+        public void VisualizeStarMap(StarMap starMap)
+        {
+            
+            
+            Debug.Log("Visualizing Star Map with " + starMap.StarNodes.Length + " Star Nodes.");
+            foreach (var starNode in starMap.StarNodes)
+            {
+                if (starNode == null) continue;
+                GameObject starNodeObject = Instantiate(starNodePrefab, starMapParent);
+                
+                
+                RectTransform rectTransform = starNodeObject.GetComponent<RectTransform>();
+                if (rectTransform != null)
+                {
+                    rectTransform.anchoredPosition = GetStarNodePosition(starNode, rectTransform);
+                }
+                
+                
+                nodeObjects.Add(starNodeObject);
+            }
         }
 
-        private void VisualizeConnections(GameMap gameMap)
+        private void VisualizeConnections(SystemMap systemMap)
         {
-            Debug.Log("Visualizing Connections for Map with " + gameMap.nodeConnections.Count + " connections.");
+            Debug.Log("Visualizing Connections for Map with " + systemMap.nodeConnections.Count + " connections.");
 
-            foreach (var connection in gameMap.nodeConnections)
+            foreach (var connection in systemMap.nodeConnections)
             {
                 if (connection.NodeA == null || connection.NodeB == null) continue;
                 if (!nodeToObject.ContainsKey(connection.NodeA) || !nodeToObject.ContainsKey(connection.NodeB)) continue;
@@ -97,12 +157,12 @@ namespace _Project.Code.MapGenerator
             connectionObjects.Clear();
         }
 
-        private void VisualizeNodes(GameMap gameMap)
+        private void VisualizeNodes(SystemMap systemMap)
         {
             nodeToObject.Clear();
-            for (int nodeBlockId = 0; nodeBlockId < gameMap.mapNodeBlocks.Count; nodeBlockId++)
+            for (int nodeBlockId = 0; nodeBlockId < systemMap.mapNodeBlocks.Count; nodeBlockId++)
             {
-                MapNodeBlock nodeBlock = gameMap.mapNodeBlocks[nodeBlockId];
+                SystemMapNodeBlock nodeBlock = systemMap.mapNodeBlocks[nodeBlockId];
                 List<Vector3> nodePositions = CalculatePositionOfNode(nodeBlock.NodeCount, nodeBlockId);
 
                 for (int i = 0; i < nodeBlock.NodeCount; i++)

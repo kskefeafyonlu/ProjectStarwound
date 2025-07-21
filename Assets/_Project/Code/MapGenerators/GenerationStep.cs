@@ -8,7 +8,7 @@ namespace _Project.Code.MapGenerator
     {
         public int Order = 0;
         
-        public virtual void ExecuteStep(GameMap map)
+        public virtual void ExecuteStep(SystemMap map)
         {
             
         }

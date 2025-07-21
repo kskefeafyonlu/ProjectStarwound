@@ -17,7 +17,7 @@ namespace _Project.Code.MapGenerator
         public float percentageToRemove = 0.2f; // 20% of connections will be removed
 
 
-        public override void ExecuteStep(GameMap map)
+        public override void ExecuteStep(SystemMap map)
         {
             switch (Type)
             {
@@ -30,7 +30,7 @@ namespace _Project.Code.MapGenerator
             }
         }
 
-        private void GenerateStandardConnections(GameMap map)
+        private void GenerateStandardConnections(SystemMap map)
         {
             map.nodeConnections.Clear();
 
@@ -54,7 +54,7 @@ namespace _Project.Code.MapGenerator
 
         
 
-private void RemoveSomeConnections(GameMap map, float percentageToRemove)
+private void RemoveSomeConnections(SystemMap map, float percentageToRemove)
 {
     int removeCount = Mathf.FloorToInt(map.nodeConnections.Count * percentageToRemove);
     var rng = new System.Random();

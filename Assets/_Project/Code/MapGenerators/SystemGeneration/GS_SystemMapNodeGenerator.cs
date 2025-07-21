@@ -10,15 +10,15 @@ namespace _Project.Code.MapGenerator
         public int maxYNodeCount = 3;
         public int minYNodeCount = 1;
 
-        public override void ExecuteStep(GameMap map)
+        public override void ExecuteStep(SystemMap map)
         {
             Debug.Log("Executing Map Node Generation Step");
             
-            map.mapNodeBlocks = new List<MapNodeBlock>();
+            map.mapNodeBlocks = new List<SystemMapNodeBlock>();
 
             for (int x = 0; x < xBlockCount; x++)
             {
-                MapNodeBlock block = new MapNodeBlock();
+                SystemMapNodeBlock block = new SystemMapNodeBlock();
 
                 // First and last block: only one node
                 if (x == 0 || x == xBlockCount - 1)

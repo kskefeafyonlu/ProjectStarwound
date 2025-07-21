@@ -7,7 +7,7 @@ namespace _Project.Code.MapGenerator
     [Serializable]
     public class SystemMapGenerationAlgo
     {
-        [HideInInspector] public GameMap map;
+        [HideInInspector] public SystemMap map;
 
 
         
@@ -15,9 +15,9 @@ namespace _Project.Code.MapGenerator
 
         
         
-        public GameMap GenerateMap()
+        public SystemMap GenerateMap()
         {
-            map = new GameMap();
+            map = new SystemMap();
             
             GenerationSteps.Sort((a, b) => a.Order.CompareTo(b.Order));
             
