@@ -4,7 +4,7 @@ using UnityEngine;
 namespace _Project.Code.MapGenerator
 {
     [CreateAssetMenu(fileName = "GS_MapNodeInit", menuName = "MapGenerator/GenerationSteps/GS_MapNodeInit")]
-    public class GS_MapNodeGenerator : GenerationStep
+    public class GS_SystemMapNodeGenerator : GenerationStep
     {
         public int xBlockCount = 5;
         public int maxYNodeCount = 3;

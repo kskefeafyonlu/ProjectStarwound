@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: GS_MapNodeInit
   m_EditorClassIdentifier: 
   Order: 1
+  xBlockCount: 8
+  maxYNodeCount: 3
+  minYNodeCount: 1

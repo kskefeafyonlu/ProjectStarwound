@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Order: 2
   Type: 0
+  percentageToRemove: 0.5

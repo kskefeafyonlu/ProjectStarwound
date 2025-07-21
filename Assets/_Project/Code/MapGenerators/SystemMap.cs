@@ -5,16 +5,16 @@ namespace _Project.Code.MapGenerator
 {
     
     [System.Serializable]
-    public class GameMap
+    public class SystemMap
     {
         
-        public List<MapNodeBlock> mapNodeBlocks;
+        public List<SystemMapNodeBlock> mapNodeBlocks;
         
         public List<NodeConnection> nodeConnections;
 
-        public GameMap()
+        public SystemMap()
         {
-            mapNodeBlocks = new List<MapNodeBlock>();
+            mapNodeBlocks = new List<SystemMapNodeBlock>();
             nodeConnections = new List<NodeConnection>();
 
         }

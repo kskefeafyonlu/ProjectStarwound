@@ -5,7 +5,7 @@ using UnityEngine;
 namespace _Project.Code.MapGenerator
 {
     [Serializable]
-    public class MapGenerationAlgo
+    public class SystemMapGenerationAlgo
     {
         [HideInInspector] public GameMap map;
 
