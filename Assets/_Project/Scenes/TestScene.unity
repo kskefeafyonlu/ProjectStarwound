@@ -405,6 +405,10 @@ MonoBehaviour:
   nodeOffsetX: 100
   nodeOffsetY: 0
   nodeObjects: []
+  starConnectionThickness: 4
+  starConnectionOffset: {x: 0, y: -533}
+  starConnectionScaleX: 0.52
+  starConnectionScaleY: 0.49
 --- !u!1 &281415458
 GameObject:
   m_ObjectHideFlags: 0

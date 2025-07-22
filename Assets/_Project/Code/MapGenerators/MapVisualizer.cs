@@ -25,7 +25,7 @@ namespace _Project.Code.MapGenerator
 
         public List<GameObject> nodeObjects = new List<GameObject>();
         private List<GameObject> connectionObjects = new List<GameObject>();
-        
+
         private Dictionary<MapNode, GameObject> nodeToObject = new Dictionary<MapNode, GameObject>();
 
         private float timer = 0f;
@@ -35,7 +35,7 @@ namespace _Project.Code.MapGenerator
         {
             map = MB_MapManager.Instance.CurrentSystemMap;
             starMap = MB_MapManager.Instance.CurrentStarMap;
-            
+
 
             timer += Time.deltaTime;
             if (timer >= updateInterval)
@@ -44,12 +44,11 @@ namespace _Project.Code.MapGenerator
                 {
                     Debug.Log("Visualizing Map with " + map.mapNodeBlocks.Count + " Node Blocks.");
                     VisualizeMap();
-                    
                 }
+
                 timer = 0f;
             }
         }
-
 
 
         private Vector2 GetStarNodePosition(StarNode starNode, RectTransform rectTransform)
@@ -81,45 +80,45 @@ namespace _Project.Code.MapGenerator
 
         public void VisualizeMap()
         {
-
             ClearMapObjects();
-            
+
             VisualizeNodes(map);
             VisualizeConnections(map);
             VisualizeStarMap(starMap);
             VisualizeStarConnections(starMap);
         }
-        
+
         public void VisualizeStarMap(StarMap starMap)
         {
-            
-            
             Debug.Log("Visualizing Star Map with " + starMap.StarNodes.Length + " Star Nodes.");
             foreach (var starNode in starMap.StarNodes)
             {
                 if (starNode == null) continue;
                 GameObject starNodeObject = Instantiate(starNodePrefab, starMapParent);
-                
-                
+
+
                 RectTransform rectTransform = starNodeObject.GetComponent<RectTransform>();
                 if (rectTransform != null)
                 {
                     rectTransform.anchoredPosition = GetStarNodePosition(starNode, rectTransform);
                 }
-                
-                
+
+
                 nodeObjects.Add(starNodeObject);
             }
         }
-        
-        
-        
+
+
+        public float starConnectionThickness = 4f;
+        public Vector2 starConnectionOffset = Vector2.zero;
+        public float starConnectionScaleX = 1f; // Separate X scaling
+        public float starConnectionScaleY = 1f; // Separate Y scaling
+
         public void VisualizeStarConnections(StarMap starMap)
         {
             Debug.Log("Visualizing Star Connections for Map with " + starMap.StarNodes.Length + " Star Nodes.");
 
             var drawnConnections = new HashSet<string>();
-            float lineThickness = 4f;
 
             foreach (var starNode in starMap.StarNodes)
             {
@@ -129,23 +128,32 @@ namespace _Project.Code.MapGenerator
                 {
                     if (connection.NodeA == null || connection.NodeB == null) continue;
 
-                    // Avoid duplicate lines
                     string key = $"{connection.NodeA.NodeName}_{connection.NodeB.NodeName}";
                     string reverseKey = $"{connection.NodeB.NodeName}_{connection.NodeA.NodeName}";
                     if (drawnConnections.Contains(key) || drawnConnections.Contains(reverseKey)) continue;
                     drawnConnections.Add(key);
 
-                    Vector2 start = GetStarNodePosition(connection.NodeA, starMapParent.GetComponent<RectTransform>());
-                    Vector2 end = GetStarNodePosition(connection.NodeB, starMapParent.GetComponent<RectTransform>());
-                    
+                    Vector2 startRaw =
+                        GetStarNodePosition(connection.NodeA, starMapParent.GetComponent<RectTransform>()) +
+                        starConnectionOffset;
+                    Vector2 endRaw =
+                        GetStarNodePosition(connection.NodeB, starMapParent.GetComponent<RectTransform>()) +
+                        starConnectionOffset;
+
+                    Vector2 start = new Vector2(startRaw.x * starConnectionScaleX, startRaw.y * starConnectionScaleY);
+                    Vector2 end = new Vector2(endRaw.x * starConnectionScaleX, endRaw.y * starConnectionScaleY);
+
                     GameObject lineObj = Instantiate(connectionPrefab, starMapParent);
                     RectTransform lineRect = lineObj.GetComponent<RectTransform>();
                     if (lineRect != null)
                     {
-                        lineRect.anchoredPosition = (start + end) / 2f;
+                        lineRect.anchoredPosition = (start + end) / 2f -
+                                                    new Vector2(lineRect.sizeDelta.x / 2f, lineRect.sizeDelta.y / 2f);
                         Vector2 dir = end - start;
                         float length = dir.magnitude;
-                        lineRect.sizeDelta = new Vector2(length, lineThickness);
+                        // Use average scale for thickness
+                        float avgScale = (starConnectionScaleX + starConnectionScaleY) / 2f;
+                        lineRect.sizeDelta = new Vector2(length, starConnectionThickness * avgScale);
                         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
                         lineRect.rotation = Quaternion.Euler(0, 0, angle);
                     }
@@ -162,7 +170,8 @@ namespace _Project.Code.MapGenerator
             foreach (var connection in systemMap.nodeConnections)
             {
                 if (connection.NodeA == null || connection.NodeB == null) continue;
-                if (!nodeToObject.ContainsKey(connection.NodeA) || !nodeToObject.ContainsKey(connection.NodeB)) continue;
+                if (!nodeToObject.ContainsKey(connection.NodeA) ||
+                    !nodeToObject.ContainsKey(connection.NodeB)) continue;
 
                 Vector3 start = nodeToObject[connection.NodeA].GetComponent<RectTransform>().anchoredPosition;
                 Vector3 end = nodeToObject[connection.NodeB].GetComponent<RectTransform>().anchoredPosition;
@@ -182,8 +191,6 @@ namespace _Project.Code.MapGenerator
                 connectionObjects.Add(lineObj); // Add to list for clearing later
             }
         }
-        
-        
 
 
         private void ClearMapObjects()
@@ -192,12 +199,14 @@ namespace _Project.Code.MapGenerator
             {
                 Destroy(obj);
             }
+
             nodeObjects.Clear();
 
             foreach (var obj in connectionObjects)
             {
                 Destroy(obj);
             }
+
             connectionObjects.Clear();
         }
 
@@ -225,6 +234,7 @@ namespace _Project.Code.MapGenerator
             {
                 Destroy(obj);
             }
+
             nodeObjects.Clear();
         }
 
@@ -265,6 +275,7 @@ namespace _Project.Code.MapGenerator
                     positions.Add(new Vector3(x, y, 0));
                 }
             }
+
             return positions;
         }
     }
