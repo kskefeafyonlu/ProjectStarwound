@@ -7,5 +7,6 @@ namespace _Project.Code.MapGenerators.StarMapGeneration
         public StarNode[,] StarNodes = new StarNode[6, 4];
         
 
+
     }
 }

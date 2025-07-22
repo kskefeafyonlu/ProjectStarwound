@@ -37,9 +37,6 @@ namespace _Project.Code.SystemMapGenerator
             {
                 CurrentSystemMap = SystemGenerationAlgorithm.GenerateMap();
                 StarMapGenerationAlgorithm.GenerateMap(CurrentSystemMap);
-                Debug.Log("System Map generated with " + CurrentSystemMap.mapNodeBlocks.Count + " Node Blocks.");
-                Debug.Log("First Node Block has " + CurrentSystemMap.mapNodeBlocks[0].nodes.Count + " Nodes.");
-                Debug.Log("First Node has Star Map with " + CurrentSystemMap.mapNodeBlocks[0].nodes[0].StarMap.StarNodes.Length + " Star Nodes.");
                 
                 CurrentStarMap = CurrentSystemMap.mapNodeBlocks[0].nodes[0].StarMap;
             }

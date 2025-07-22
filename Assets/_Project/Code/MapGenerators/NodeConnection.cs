@@ -14,5 +14,10 @@ namespace _Project.Code.MapGenerator
             NodeB = nodeB;
 
         }
+        
+        public override string ToString()
+        {
+            return $"{NodeA.NodeName} <-> {NodeB.NodeName}";
+        }
     }
 }

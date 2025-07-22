@@ -367,6 +367,7 @@ MonoBehaviour:
   StarMapGenerationAlgorithm:
     GenerationSteps:
     - {fileID: 11400000, guid: 15b0184e62ac5404eb73869f8125a545, type: 2}
+    - {fileID: 11400000, guid: 993b262be53136d4a93afd7a0cabac7c, type: 2}
 --- !u!4 &275294682
 Transform:
   m_ObjectHideFlags: 0

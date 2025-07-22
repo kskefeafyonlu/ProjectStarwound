@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace _Project.Code.MapGenerators.StarMapGeneration
@@ -15,6 +16,7 @@ namespace _Project.Code.MapGenerators.StarMapGeneration
         public StarNodeType NodeType = StarNodeType.Normal;
         public Vector2Int ArrayPosition;
         public Vector2 PositionInCell;
+        public List<StarNodeConnection> StarNodeConnections = new List<StarNodeConnection>();
         
         
         public StarMap StarMapReference;

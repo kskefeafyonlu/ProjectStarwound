@@ -43,7 +43,7 @@ namespace _Project.Code.MapGenerator
                 if (map != null)
                 {
                     Debug.Log("Visualizing Map with " + map.mapNodeBlocks.Count + " Node Blocks.");
-                    VisualizeMap(map);
+                    VisualizeMap();
                     
                 }
                 timer = 0f;
@@ -79,14 +79,15 @@ namespace _Project.Code.MapGenerator
         }
 
 
-        public void VisualizeMap(SystemMap systemMap)
+        public void VisualizeMap()
         {
 
             ClearMapObjects();
             
-            VisualizeNodes(systemMap);
-            VisualizeConnections(systemMap);
-            VisualizeStarMap(MB_MapManager.Instance.CurrentStarMap);
+            VisualizeNodes(map);
+            VisualizeConnections(map);
+            VisualizeStarMap(starMap);
+            VisualizeStarConnections(starMap);
         }
         
         public void VisualizeStarMap(StarMap starMap)
@@ -108,6 +109,49 @@ namespace _Project.Code.MapGenerator
                 
                 
                 nodeObjects.Add(starNodeObject);
+            }
+        }
+        
+        
+        
+        public void VisualizeStarConnections(StarMap starMap)
+        {
+            Debug.Log("Visualizing Star Connections for Map with " + starMap.StarNodes.Length + " Star Nodes.");
+
+            var drawnConnections = new HashSet<string>();
+            float lineThickness = 4f;
+
+            foreach (var starNode in starMap.StarNodes)
+            {
+                if (starNode == null) continue;
+
+                foreach (var connection in starNode.StarNodeConnections)
+                {
+                    if (connection.NodeA == null || connection.NodeB == null) continue;
+
+                    // Avoid duplicate lines
+                    string key = $"{connection.NodeA.NodeName}_{connection.NodeB.NodeName}";
+                    string reverseKey = $"{connection.NodeB.NodeName}_{connection.NodeA.NodeName}";
+                    if (drawnConnections.Contains(key) || drawnConnections.Contains(reverseKey)) continue;
+                    drawnConnections.Add(key);
+
+                    Vector2 start = GetStarNodePosition(connection.NodeA, starMapParent.GetComponent<RectTransform>());
+                    Vector2 end = GetStarNodePosition(connection.NodeB, starMapParent.GetComponent<RectTransform>());
+                    
+                    GameObject lineObj = Instantiate(connectionPrefab, starMapParent);
+                    RectTransform lineRect = lineObj.GetComponent<RectTransform>();
+                    if (lineRect != null)
+                    {
+                        lineRect.anchoredPosition = (start + end) / 2f;
+                        Vector2 dir = end - start;
+                        float length = dir.magnitude;
+                        lineRect.sizeDelta = new Vector2(length, lineThickness);
+                        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                        lineRect.rotation = Quaternion.Euler(0, 0, angle);
+                    }
+
+                    connectionObjects.Add(lineObj);
+                }
             }
         }
 
