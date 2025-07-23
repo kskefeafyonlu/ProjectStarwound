@@ -9,15 +9,15 @@ namespace _Project.Code.MapGenerators.StarMapGeneration
 
         public StarNode GetFirstStarNode()
         {
-            if (StarNodes != null && StarNodes.Length > 0)
-            {
-                return StarNodes[0, 0];
-            }
-            else
-            {
+            if (StarNodes == null || StarNodes.GetLength(0) == 0 || StarNodes.GetLength(1) == 0)
                 return null;
+
+            for (int y = 0; y < StarNodes.GetLength(1); y++)
+            {
+                if (StarNodes[0, y] != null)
+                    return StarNodes[0, y];
             }
-            
+            return null;
         }
     }
 }

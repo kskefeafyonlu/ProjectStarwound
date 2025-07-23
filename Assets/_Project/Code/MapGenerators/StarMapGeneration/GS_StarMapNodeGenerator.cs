@@ -51,6 +51,32 @@ namespace _Project.Code.MapGenerators.StarMapGeneration
                     node.StarMap = starMap; // <-- Fix: assign the generated StarMap to the node
                 }
             }
+            
+            // Select a random start point in the first block of the map
+            SelectMapStartPoint(map);
+        }
+        
+        
+        public void SelectMapStartPoint(SystemMap map)
+        {
+            if (map == null || map.mapNodeBlocks == null || map.mapNodeBlocks.Count == 0)
+            {
+                Debug.LogError("SystemMap or its node blocks are null/empty.");
+                return;
+            }
+
+            var firstBlock = map.mapNodeBlocks[0];
+            if (firstBlock.nodes == null || firstBlock.nodes.Count == 0)
+            {
+                Debug.LogError("First block has no nodes.");
+                return;
+            }
+
+            //random index from 0 to NodeCount - 1
+            int randomIndex = Random.Range(0, firstBlock.NodeCount);
+            var startNode = firstBlock.nodes[randomIndex];
+            startNode.Type = NodeType.Start; // Set the type of the selected node to Start
+            
         }
     }
 }

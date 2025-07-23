@@ -360,6 +360,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29009c3735ec18a40a19335dd40103ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentSystemName: DefaultSystem
+  CurrentStarName: DefaultStar
   SystemGenerationAlgorithm:
     GenerationSteps:
     - {fileID: 11400000, guid: 82d2bdf5b873f1440bc70a2b0a1ecc27, type: 2}
@@ -404,7 +406,6 @@ MonoBehaviour:
   nodeSpacingY: 100
   nodeOffsetX: 100
   nodeOffsetY: 0
-  nodeObjects: []
   starConnectionThickness: 4
   starConnectionOffset: {x: 0, y: -533}
   starConnectionScaleX: 0.52
@@ -950,8 +951,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed4903c6556a44ba86d25a7f9ad8b32a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitObjs: []
-  pointerAction: {fileID: 1120369429361536294, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  pointerAction: {fileID: 3001919216989983466, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
 --- !u!1 &1179008810
 GameObject:
   m_ObjectHideFlags: 0

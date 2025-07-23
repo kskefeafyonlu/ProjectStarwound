@@ -63,7 +63,7 @@ namespace _Project.Code
             {
                 foreach (var obj in hitObjects)
                 {
-                    Debug.Log("Hit object: " + obj.name);
+                    //Debug.Log("Hit object: " + obj.name);
                 }
             }
         }
@@ -111,7 +111,7 @@ namespace _Project.Code
             MB_StarMapNode starMapNode = obj.GetComponent<MB_StarMapNode>();
             if (starMapNode != null && starMapNode.StarNode != null && MB_MapsManager.Instance != null)
             {
-                Debug.Log("Hit Star Node: " + starMapNode.StarNode.NodeName);
+
                 MB_MapsManager.Instance.SelectStarNode(starMapNode.StarNode);
             }
         }

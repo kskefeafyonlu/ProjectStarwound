@@ -50,6 +50,8 @@ namespace _Project.Code.SystemMapGenerator
             GenerateStarMapsForSystem(CurrentSystemMap);
 
             CurrentStarMap = GetFirstStarMapFromSystem(CurrentSystemMap);
+            
+            CurrentStarNode = CurrentStarMap?.GetFirstStarNode();
         }
 
         private bool IsGenerationAlgorithmSet()
@@ -70,6 +72,7 @@ namespace _Project.Code.SystemMapGenerator
             {
                 return systemMap.mapNodeBlocks[0].nodes[0].StarMap;
             }
+
             return null;
         }
 
@@ -78,6 +81,12 @@ namespace _Project.Code.SystemMapGenerator
             if (!IsValidSystemNode(systemMapNode))
             {
                 Debug.LogError("Selected Map Node or its Star Map is null!");
+                return;
+            }
+            
+            if (CurrentSystemMapNode != null && !CheckIfMovableSystem(CurrentSystemMapNode, systemMapNode))
+            {
+                Debug.LogError("Selected System Map Node is not movable from the current one!");
                 return;
             }
 
@@ -104,6 +113,12 @@ namespace _Project.Code.SystemMapGenerator
                 Debug.LogError("Current Star Map or selected Star Node is null!");
                 return;
             }
+            
+            if (CurrentStarNode != null && !CheckIfMovableStar(CurrentStarNode, starNode))
+            {
+                Debug.LogError("Selected Star Node is not movable from the current one!");
+                return;
+            }
 
             CurrentStarNode = starNode;
             CurrentStarName = starNode.NodeName;
@@ -115,5 +130,47 @@ namespace _Project.Code.SystemMapGenerator
         {
             return CurrentStarMap != null && node != null;
         }
+
+        private bool CheckIfMovableSystem(SystemMapNode nodeA, SystemMapNode nodeB)
+        {
+            if (nodeA == null || nodeB == null)
+                return false;
+
+            foreach (var connection in CurrentSystemMap.nodeConnections)
+            {
+                if ((connection.NodeA == nodeA && connection.NodeB == nodeB) ||
+                    (connection.NodeA == nodeB && connection.NodeB == nodeA))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        
+        private bool CheckIfMovableStar(StarNode nodeA, StarNode nodeB)
+        {
+            if (nodeA == null || nodeB == null)
+                return false;
+
+            foreach (var star in CurrentStarMap.StarNodes)
+            {
+                foreach (var connection in star.StarNodeConnections)
+                {
+                    if ((connection.NodeA == nodeA && connection.NodeB == nodeB) ||
+                        (connection.NodeA == nodeB && connection.NodeB == nodeA))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
+
+
+
+
 }
+    
+
