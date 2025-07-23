@@ -43,7 +43,7 @@ namespace _Project.Code.MapGenerator
                 {
                     foreach (var rightNode in nextBlock.nodes)
                     {
-                        var connection = new NodeConnection($"{node.NodeName}-{rightNode.NodeName}", node, rightNode);
+                        var connection = new SystemNodeConnection($"{node.NodeName}-{rightNode.NodeName}", node, rightNode);
                         map.nodeConnections.Add(connection);
                     }
                 }
@@ -84,7 +84,7 @@ private void RemoveSomeConnections(SystemMap map, float percentageToRemove)
                     var target = nextBlock.nodes.FirstOrDefault();
                     if (target != null)
                     {
-                        map.nodeConnections.Add(new NodeConnection($"{node.NodeName}-{target.NodeName}", node, target));
+                        map.nodeConnections.Add(new SystemNodeConnection($"{node.NodeName}-{target.NodeName}", node, target));
                     }
                 }
             }
@@ -99,7 +99,7 @@ private void RemoveSomeConnections(SystemMap map, float percentageToRemove)
                     var source = prevBlock.nodes.FirstOrDefault();
                     if (source != null)
                     {
-                        map.nodeConnections.Add(new NodeConnection($"{source.NodeName}-{node.NodeName}", source, node));
+                        map.nodeConnections.Add(new SystemNodeConnection($"{source.NodeName}-{node.NodeName}", source, node));
                     }
                 }
             }

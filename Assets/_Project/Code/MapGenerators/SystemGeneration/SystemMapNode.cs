@@ -10,7 +10,7 @@ namespace _Project.Code.MapGenerator
         Normal
     }
     
-    public class MapNode
+    public class SystemMapNode
     {
         public string NodeName = "DefaultNode";
         public NodeType Type = NodeType.Normal;
@@ -18,7 +18,7 @@ namespace _Project.Code.MapGenerator
         public StarMap StarMap;
         
         
-        public MapNode(string nodeName, NodeType type = NodeType.Normal)
+        public SystemMapNode(string nodeName, NodeType type = NodeType.Normal)
         {
             NodeName = nodeName;
 

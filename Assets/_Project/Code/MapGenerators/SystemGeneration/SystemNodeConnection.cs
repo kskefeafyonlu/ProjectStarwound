@@ -1,13 +1,13 @@
 namespace _Project.Code.MapGenerator
 {
-    public class NodeConnection
+    public class SystemNodeConnection
     {
         public string ConnectionName = "DefaultConnection";
-        public MapNode NodeA;
-        public MapNode NodeB;
+        public SystemMapNode NodeA;
+        public SystemMapNode NodeB;
 
         
-        public NodeConnection(string connectionName, MapNode nodeA, MapNode nodeB)
+        public SystemNodeConnection(string connectionName, SystemMapNode nodeA, SystemMapNode nodeB)
         {
             ConnectionName = connectionName;
             NodeA = nodeA;

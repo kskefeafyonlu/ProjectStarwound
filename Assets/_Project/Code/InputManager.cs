@@ -12,12 +12,21 @@ namespace _Project.Code
     public class InputManager : MonoBehaviour
     {
         public static InputManager Instance;
-        
-        public List<GameObject> hitObjs = new List<GameObject>();
-        
+
         public InputActionReference pointerAction;
 
         private void Awake()
+        {
+            InitializeSingleton();
+            RegisterPointerAction();
+        }
+
+        private void Update()
+        {
+            DebugHitObjects();
+        }
+
+        private void InitializeSingleton()
         {
             if (Instance == null)
             {
@@ -28,10 +37,13 @@ namespace _Project.Code
             {
                 Destroy(gameObject);
             }
-            
+        }
+
+        private void RegisterPointerAction()
+        {
             if (pointerAction != null)
             {
-                pointerAction.action.performed += ctx => CheckNodeHits();
+                pointerAction.action.performed += ctx => OnPointerPerformed();
             }
             else
             {
@@ -39,27 +51,26 @@ namespace _Project.Code
             }
         }
 
-
-        private void Update()
+        private void OnPointerPerformed()
         {
-            
-            if (hitObjs.Count > 0)
+            HandleNodeSelection();
+        }
+
+        private void DebugHitObjects()
+        {
+            var hitObjects = GetObjectsUnderPointer();
+            if (hitObjects.Count > 0)
             {
-                foreach (var obj in hitObjs)
+                foreach (var obj in hitObjects)
                 {
                     Debug.Log("Hit object: " + obj.name);
                 }
             }
-
         }
 
-
-
-        public List<GameObject> GetObjectsUnderPointer()
+        private List<GameObject> GetObjectsUnderPointer()
         {
-
             var hitObjects = new List<GameObject>();
-
             Vector2 pointerPos = Pointer.current.position.ReadValue();
 
             PointerEventData eventData = new PointerEventData(EventSystem.current)
@@ -67,7 +78,6 @@ namespace _Project.Code
                 position = pointerPos
             };
 
-            // Use the new API to find the GraphicRaycaster
             GraphicRaycaster raycaster = Object.FindFirstObjectByType<GraphicRaycaster>();
             if (raycaster == null)
             {
@@ -81,39 +91,38 @@ namespace _Project.Code
             foreach (var result in results)
             {
                 hitObjects.Add(result.gameObject);
-                
             }
 
             return hitObjects;
         }
 
-
-        
-        public void CheckNodeHits()
+        private void HandleNodeSelection()
         {
-            List<GameObject> hitObjs = GetObjectsUnderPointer();
-            if (hitObjs.Count > 0)
+            var hitObjects = GetObjectsUnderPointer();
+            foreach (var obj in hitObjects)
             {
-                foreach (var obj in hitObjs)
-                {
-                    MB_StarNode starNode = obj.GetComponent<MB_StarNode>();
-                    if (starNode != null && starNode.StarNode != null && MB_MapManager.Instance != null)
-                    {
-                        Debug.Log("Hit Star Node: " + starNode.StarNode.NodeName);
-                        MB_MapManager.Instance.SelectStarNode(starNode.StarNode);
-                    }
+                TrySelectStarNode(obj);
+                TrySelectSystemNode(obj);
+            }
+        }
 
-                    MB_MapNode mapNode = obj.GetComponent<MB_MapNode>();
-                    if (mapNode != null && mapNode.MapNode != null && MB_MapManager.Instance != null)
-                    {
-                        Debug.Log("Hit Map Node: " + mapNode.MapNode.NodeName);
-                        MB_MapManager.Instance.SelectSystemNode(mapNode.MapNode);
-                    }
-                }
+        private void TrySelectStarNode(GameObject obj)
+        {
+            MB_StarMapNode starMapNode = obj.GetComponent<MB_StarMapNode>();
+            if (starMapNode != null && starMapNode.StarNode != null && MB_MapsManager.Instance != null)
+            {
+                Debug.Log("Hit Star Node: " + starMapNode.StarNode.NodeName);
+                MB_MapsManager.Instance.SelectStarNode(starMapNode.StarNode);
+            }
+        }
+
+        private void TrySelectSystemNode(GameObject obj)
+        {
+            MB_SystemMapNode systemMapNode = obj.GetComponent<MB_SystemMapNode>();
+            if (systemMapNode != null && systemMapNode.SystemMapNode != null && MB_MapsManager.Instance != null)
+            {
+                MB_MapsManager.Instance.SelectSystemNode(systemMapNode.SystemMapNode);
             }
         }
     }
-
-
-
 }

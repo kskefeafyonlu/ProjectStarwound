@@ -48,7 +48,7 @@ namespace _Project.Code.MapGenerator
                             break;
                     }
 
-                    block.nodes.Add(new MapNode(nodeName, type));
+                    block.nodes.Add(new SystemMapNode(nodeName, type));
                 }
 
                 map.mapNodeBlocks.Add(block);

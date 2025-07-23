@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace _Project.Code.MapGenerators
 {
-    public class MB_MapNode : MonoBehaviour
+    public class MB_SystemMapNode : MonoBehaviour
     {
-        public MapNode MapNode;
+        public SystemMapNode SystemMapNode;
 
-        public void SetMapNode(MapNode mapNode)
+        public void SetMapNode(SystemMapNode systemMapNode)
         {
-            MapNode = mapNode;
+            SystemMapNode = systemMapNode;
         }
         
         // public void Select()

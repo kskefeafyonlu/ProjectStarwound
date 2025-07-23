@@ -6,11 +6,11 @@ namespace _Project.Code.MapGenerator
     {
         public int NodeCount = 1;
         
-        public List<MapNode> nodes;
+        public List<SystemMapNode> nodes;
         
         public SystemMapNodeBlock()
         {
-            nodes = new List<MapNode>();
+            nodes = new List<SystemMapNode>();
         }
         
         

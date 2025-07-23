@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _Project.Code.MapGenerators.StarMapGeneration
 {
-    public class MB_StarNode : MonoBehaviour
+    public class MB_StarMapNode : MonoBehaviour
     {
         public StarNode StarNode;
         

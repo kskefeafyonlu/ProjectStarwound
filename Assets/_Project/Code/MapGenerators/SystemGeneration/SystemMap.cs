@@ -10,12 +10,12 @@ namespace _Project.Code.MapGenerator
         
         public List<SystemMapNodeBlock> mapNodeBlocks;
         
-        public List<NodeConnection> nodeConnections;
+        public List<SystemNodeConnection> nodeConnections;
 
         public SystemMap()
         {
             mapNodeBlocks = new List<SystemMapNodeBlock>();
-            nodeConnections = new List<NodeConnection>();
+            nodeConnections = new List<SystemNodeConnection>();
 
         }
         
