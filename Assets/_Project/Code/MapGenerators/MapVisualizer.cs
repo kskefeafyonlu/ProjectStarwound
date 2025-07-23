@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Project.Code.MapGenerators;
 using _Project.Code.MapGenerators.StarMapGeneration;
 using _Project.Code.SystemMapGenerator;
 using UnityEngine;
@@ -16,7 +17,10 @@ namespace _Project.Code.MapGenerator
         public GameObject starNodePrefab;
 
         [HideInInspector] public SystemMap map;
+        [HideInInspector] public MapNode mapNode;
+        
         [HideInInspector] public StarMap starMap;
+        [HideInInspector] public StarNode starNode;
 
         public float nodeSpacingX = 100.0f;
         public float nodeSpacingY = 100.0f;
@@ -34,20 +38,28 @@ namespace _Project.Code.MapGenerator
         private void Update()
         {
             map = MB_MapManager.Instance.CurrentSystemMap;
+            mapNode = MB_MapManager.Instance.CurrentMapNode;
             starMap = MB_MapManager.Instance.CurrentStarMap;
+            starNode = MB_MapManager.Instance.CurrentStarNode;
 
 
             timer += Time.deltaTime;
             if (timer >= updateInterval)
             {
-                if (map != null)
+                if (map != null && map.mapNodeBlocks != null)
                 {
-                    Debug.Log("Visualizing Map with " + map.mapNodeBlocks.Count + " Node Blocks.");
                     VisualizeMap();
                 }
 
                 timer = 0f;
             }
+        }
+        
+        public void OnMapGenerated(SystemMap newMap, StarMap newStarMap)
+        {
+            map = newMap;
+            starMap = newStarMap;
+            VisualizeMap();
         }
 
 
@@ -90,12 +102,16 @@ namespace _Project.Code.MapGenerator
 
         public void VisualizeStarMap(StarMap starMap)
         {
-            Debug.Log("Visualizing Star Map with " + starMap.StarNodes.Length + " Star Nodes.");
             foreach (var starNode in starMap.StarNodes)
             {
                 if (starNode == null) continue;
                 GameObject starNodeObject = Instantiate(starNodePrefab, starMapParent);
-
+                starNodeObject.name = starNode.NodeName;
+                MB_StarNode mbStarNode = starNodeObject.GetComponent<MB_StarNode>();
+                if (mbStarNode != null)
+                {
+                    mbStarNode.SetStarNode(starNode);
+                }
 
                 RectTransform rectTransform = starNodeObject.GetComponent<RectTransform>();
                 if (rectTransform != null)
@@ -103,6 +119,15 @@ namespace _Project.Code.MapGenerator
                     rectTransform.anchoredPosition = GetStarNodePosition(starNode, rectTransform);
                 }
 
+                // Change color if this is the selected node
+                var image = starNodeObject.GetComponent<UnityEngine.UI.Image>();
+                if (image != null)
+                {
+                    if (starNode == this.starNode)
+                        image.color = Color.yellow; // Selected color
+                    else
+                        image.color = Color.white;  // Default color
+                }
 
                 nodeObjects.Add(starNodeObject);
             }
@@ -116,7 +141,7 @@ namespace _Project.Code.MapGenerator
 
         public void VisualizeStarConnections(StarMap starMap)
         {
-            Debug.Log("Visualizing Star Connections for Map with " + starMap.StarNodes.Length + " Star Nodes.");
+            
 
             var drawnConnections = new HashSet<string>();
 
@@ -165,7 +190,7 @@ namespace _Project.Code.MapGenerator
 
         private void VisualizeConnections(SystemMap systemMap)
         {
-            Debug.Log("Visualizing Connections for Map with " + systemMap.nodeConnections.Count + " connections.");
+            
 
             foreach (var connection in systemMap.nodeConnections)
             {
@@ -222,26 +247,38 @@ namespace _Project.Code.MapGenerator
                 {
                     MapNode node = nodeBlock.nodes[i];
                     GameObject nodeObject = InstantiateNode(node, nodePositions[i]);
+
+                    // Change color if this is the selected mapNode
+                    var image = nodeObject.GetComponent<UnityEngine.UI.Image>();
+                    if (image != null)
+                    {
+                        if (node == this.mapNode)
+                        {
+                            image.color = Color.yellow; // Selected color
+                            Debug.Log("Node: " + node.NodeName + " Color: " + image.color);
+                        }
+                        else
+                            image.color = Color.white;  // Default color
+                    }
+
                     nodeObjects.Add(nodeObject);
                     nodeToObject[node] = nodeObject;
                 }
             }
         }
 
-        private void ClearNodeObjects()
-        {
-            foreach (var obj in nodeObjects)
-            {
-                Destroy(obj);
-            }
 
-            nodeObjects.Clear();
-        }
+
 
         private GameObject InstantiateNode(MapNode node, Vector3 position)
         {
             GameObject nodeObject = Instantiate(nodePrefab, mapParent);
             nodeObject.name = node.NodeName;
+            MB_MapNode mbMapNode = nodeObject.GetComponent<MB_MapNode>();
+            if (mbMapNode != null)
+            {
+                mbMapNode.SetMapNode(node); // <-- Ensure this is called
+            }
 
             RectTransform rectTransform = nodeObject.GetComponent<RectTransform>();
             if (rectTransform != null)

@@ -10,7 +10,6 @@ namespace _Project.Code.MapGenerators.StarMapGeneration
     {
         public override void ExecuteStep(SystemMap map)
         {
-            Debug.Log("Executing GS_StarMapConnectionGenerator...");
             if (map == null) return;
 
             foreach (var nodeBlock in map.mapNodeBlocks)

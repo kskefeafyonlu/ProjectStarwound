@@ -12,7 +12,6 @@ namespace _Project.Code.MapGenerator
 
         public override void ExecuteStep(SystemMap map)
         {
-            Debug.Log("Executing Map Node Generation Step");
             
             map.mapNodeBlocks = new List<SystemMapNodeBlock>();
 

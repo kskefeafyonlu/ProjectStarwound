@@ -9,7 +9,13 @@ namespace _Project.Code.SystemMapGenerator
         public static MB_MapManager Instance;
 
         public SystemMap CurrentSystemMap;
+        public MapNode CurrentMapNode;
+        
         public StarMap CurrentStarMap;
+        public StarNode CurrentStarNode;
+        
+        public string CurrentSystemName = "DefaultSystem";
+        public string CurrentStarName = "DefaultStar";
 
         public SystemMapGenerationAlgo SystemGenerationAlgorithm;
         public StarMapGenerationAlgo StarMapGenerationAlgorithm;
@@ -27,6 +33,7 @@ namespace _Project.Code.SystemMapGenerator
                 Destroy(gameObject);
             }
         }
+        
 
 
 
@@ -47,33 +54,44 @@ namespace _Project.Code.SystemMapGenerator
         }
 
         
+
         
         
         
-        public void SelectNewSystemNode(SystemMap systemMap)
+        
+        public void SelectSystemNode(MapNode mapNode)
         {
-            if (systemMap != null)
+            if (mapNode != null && mapNode.StarMap != null)
             {
-                CurrentSystemMap = systemMap;
-                CurrentStarMap = CurrentSystemMap.mapNodeBlocks[0].nodes[0].StarMap;
+                CurrentStarMap = mapNode.StarMap;
+                CurrentMapNode = mapNode;
+                CurrentStarNode = mapNode.StarMap.GetFirstStarNode();
+
+                
+                CurrentSystemName = mapNode.NodeName;
             }
             else
             {
-                Debug.LogError("Selected System Map is null!");
+                Debug.LogError("Selected Map Node or its Star Map is null!");
             }
+            
         }
 
-        public void SelectNewStarNode(StarMap starMap)
+        public void SelectStarNode(StarNode starNode)
         {
-            if (starMap != null)
+            if (CurrentStarMap != null && starNode != null)
             {
-                CurrentStarMap = starMap;
+                CurrentStarNode = starNode;
+
+                CurrentStarName = starNode.NodeName;
+                
+                // Here you can add additional logic to handle the selected star node
+                // For example, you might want to update the UI or load specific data related to the star node.
             }
             else
             {
-                Debug.LogError("Selected Star Map is null!");
+                Debug.LogError("Current Star Map or selected Star Node is null!");
             }
-
 
         }
     }
